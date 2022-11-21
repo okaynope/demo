@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>牛客网-首页</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li th:each="map:${discussPosts}">
+                <h1 th:text="${map.post.id}"></h1>
+                <a href="#">
+                    <img th:src="${map.user.headerUrl}"/>
+                </a>
+                <h6>
+                    <a href="#" th:text="${map.post.title}">${map.post.title}</a>
+                    <span th:if="${map.post.discussPostType}==1">s</span>
+                    <span th:if="${map.post.discussPostStatus==1}">sdf</span>
+                </h6>
+                <u th:utext="${map.user.username}">sdf</u> 发布于 <b th:text="${#dates.format(map.post.createTime,'yyyy-MM-dd HH:mm:ss')}">55555555</b>
+            </li>
+        </ul>
+        <nav th:if="${page.rows>0}">
+            <ul>
+                <li>
+                    <h1>
+                        <a th:href="@{${page.path}(current=1)}">首页</a>
+                    </h1>
+                </li>
+                <li th:class="|${page.current==1?'disabled':''}|">
+                    <h1>
+                        <a th:href="@{${page.path}(current=${page.current-1})}">上一页</a>
+                    </h1>
+                </li>
+                <li th:class="|${i==page.current?'active':''}|" th:each="i:${#numbers.sequence(page.from,page.to)}">
+                    <h1>
+                        <a th:text="${i}">1</a>
+                    </h1>
+                </li>
+                <li th:class="|${page.current==page.total?'disabled':''}|">
+                    <h1>
+                        <a th:href="@{${page.path}(current=${page.current=(page.current>=page.total?page.total:page.current+1)})}">下一页</a>
+                    </h1>
+                </li>
+                <li>
+                    <h1>
+                        <a th:href="@{${page.path}(current=${page.total})}">末页</a>
+                    </h1>
+                </li>
+            </ul>
+        </nav>
+    </header>
+</body>
+</html>
