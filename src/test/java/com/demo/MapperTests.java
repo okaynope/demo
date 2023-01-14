@@ -29,7 +29,7 @@ public class MapperTests {
 
     @Test
     public void testSelectPostRows() {
-        int discussPosts = discussPostMapper.selectDiscussPostRows(221);
+        int discussPosts = discussPostMapper.selectDiscussPostRows(0);
         System.out.println(discussPosts);
     }
 
