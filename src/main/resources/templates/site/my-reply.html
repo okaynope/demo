@@ -6,8 +6,7 @@
 	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
-	<link rel="stylesheet" th:href="@{/css/login.css}" />
-	<title>牛客网-注册</title>
+	<title>牛客网-个人主页</title>
 </head>
 <body>
 	<div class="nk-container">
@@ -61,59 +60,54 @@
 
 		<!-- 内容 -->
 		<div class="main">
-			<div class="container pl-5 pr-5 pt-3 pb-3 mt-3 mb-3">
-				<h3 class="text-center text-info border-bottom pb-3">注&nbsp;&nbsp;册</h3>
-				<form class="mt-5" method="post" th:action="@{/user/register}">
-					<div class="form-group row">
-						<label for="username" class="col-sm-2 col-form-label text-right">账号:</label>
-						<div class="col-sm-10">
-							<input type="text" th:class="|form-control ${usernameMsg!=null?'is-invalid':''}|" id="username" name="username"
-								   th:value="${user!=null?user.username:''}" placeholder="请输入您的账号!" required>
-							<div class="invalid-feedback" th:text="${usernameMsg}">
-								该账号已存在!
+			<div class="container">
+				<!-- 选项 -->
+				<div class="position-relative">
+					<ul class="nav nav-tabs">
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{|/user/profile/${userId}|}">个人信息</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link" th:href="@{/user/mypost}">我的帖子</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link active" th:href="@{/user/myreply}">我的回复</a>
+						</li>
+					</ul>
+					<a href="profile.html" class="text-muted position-absolute rt-0">返回个人主页&gt;</a>
+				</div>
+				<!-- 我的回复 -->
+				<div class="mt-4">
+					<h6><b class="square"></b> 回复的帖子(<span th:text="${replyInfoCount}"></span>)</h6>
+					<ul class="list-unstyled mt-4 pl-3 pr-3">
+						<li class="border-bottom pb-3 mt-4" th:each="replyInfo:${replyInfoList}">
+							<div class="font-size-16 text-info">
+								<a href="#" class="text-info" th:text="${replyInfo.title}">备战春招，面试刷题跟他复习，一个月全搞定！</a>
 							</div>
-						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<label for="password" class="col-sm-2 col-form-label text-right">密码:</label>
-						<div class="col-sm-10">
-							<input type="password" th:class="|form-control  ${passwordMsg!=null?'is-invalid':''}|" id="password" name="password"
-								   th:value="${user!=null?user.password:''}"
-								   placeholder="请输入您的密码!" required>
-							<div class="invalid-feedback" th:text="${passwordMsg}">
-								密码长度不能小于8位!
-							</div>							
-						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<label for="confirm-password" class="col-sm-2 col-form-label text-right">确认密码:</label>
-						<div class="col-sm-10">
-							<input type="password" class="form-control" id="confirm-password"
-								   th:value="${user!=null?user.password:''}"
-								   placeholder="请再次输入密码!" required>
-							<div class="invalid-feedback">
-								两次输入的密码不一致!
+							<div class="mt-1 font-size-14" th:utext="${replyInfo.content}">
+								顶顶顶!								
 							</div>
-						</div>
-					</div>
-					<div class="form-group row">
-						<label for="email" class="col-sm-2 col-form-label text-right">邮箱:</label>
-						<div class="col-sm-10">
-							<input type="email" th:class="|form-control ${emailMsg!=null?'is-invalid':''}|" id="email" name="email"
-								   th:value="${user!=null?user.email:''}"
-								   placeholder="请输入您的邮箱!" required>
-							<div class="invalid-feedback" th:text="${emailMsg}">
-								该邮箱已注册!
+							<div class="text-right font-size-12 text-muted">
+								回复于 <b th:text="${#dates.format(replyInfo.createTime,'yyyy-MM-dd hh:mm:ss')}">2019-04-15 10:10:10</b>
 							</div>
-						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<div class="col-sm-2"></div>
-						<div class="col-sm-10 text-center">
-							<button type="submit" class="btn btn-info text-white form-control">立即注册</button>
-						</div>
-					</div>
-				</form>				
+						</li>
+
+					</ul>
+					<!-- 分页 -->
+					<nav class="mt-5" th:replace="index::pagination">
+						<ul class="pagination justify-content-center">
+							<li class="page-item"><a class="page-link" href="#">首页</a></li>
+							<li class="page-item disabled"><a class="page-link" href="#">上一页</a></li>
+							<li class="page-item active"><a class="page-link" href="#">1</a></li>
+							<li class="page-item"><a class="page-link" href="#">2</a></li>
+							<li class="page-item"><a class="page-link" href="#">3</a></li>
+							<li class="page-item"><a class="page-link" href="#">4</a></li>
+							<li class="page-item"><a class="page-link" href="#">5</a></li>
+							<li class="page-item"><a class="page-link" href="#">下一页</a></li>
+							<li class="page-item"><a class="page-link" href="#">末页</a></li>
+						</ul>
+					</nav>					
+				</div>				
 			</div>
 		</div>
 
@@ -184,6 +178,5 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script th:src="@{/js/global.js}"></script>
-	<script th:src="@{/js/register.js}"></script>
 </body>
 </html>

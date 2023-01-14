@@ -1,13 +1,13 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
-	<link rel="stylesheet" th:href="@{/css/login.css}" />
-	<title>牛客网-注册</title>
+	<link rel="stylesheet" th:href="@{/css/letter.css}" />
+	<title>牛客网-通知</title>
 </head>
 <body>
 	<div class="nk-container">
@@ -61,59 +61,73 @@
 
 		<!-- 内容 -->
 		<div class="main">
-			<div class="container pl-5 pr-5 pt-3 pb-3 mt-3 mb-3">
-				<h3 class="text-center text-info border-bottom pb-3">注&nbsp;&nbsp;册</h3>
-				<form class="mt-5" method="post" th:action="@{/user/register}">
-					<div class="form-group row">
-						<label for="username" class="col-sm-2 col-form-label text-right">账号:</label>
-						<div class="col-sm-10">
-							<input type="text" th:class="|form-control ${usernameMsg!=null?'is-invalid':''}|" id="username" name="username"
-								   th:value="${user!=null?user.username:''}" placeholder="请输入您的账号!" required>
-							<div class="invalid-feedback" th:text="${usernameMsg}">
-								该账号已存在!
+			<div class="container">
+				<div class="position-relative">
+					<!-- 选项 -->
+					<ul class="nav nav-tabs mb-3">
+						<li class="nav-item">
+							<a class="nav-link position-relative " th:href="@{/message/letter/list}">朋友私信<span class="badge badge-danger" th:text="${letterUnreadCount}" th:if="${letterUnreadCount!=0}">3</span></a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link position-relative active" th:href="@{/message/notice/list}">系统通知<span class="badge badge-danger" th:if="${noticeUnreadCount!=0}" th:text="${noticeUnreadCount}">27</span></a>
+						</li>
+					</ul>
+				</div>	
+				
+				<!-- 通知列表 -->
+				<ul class="list-unstyled">
+					<!--评论类通知-->
+					<li class="media pb-3 pt-3 mb-3 border-bottom position-relative" th:if="${commentNotice!=null}">
+						<span class="badge badge-danger" th:if="${commentNotice.unread!=0}" th:text="${commentNotice.unread}">3</span>
+						<img src="http://static.nowcoder.com/images/head/reply.png" class="mr-4 user-header" alt="通知图标">
+						<div class="media-body">
+							<h6 class="mt-0 mb-3">
+								<span>评论</span>
+								<span class="float-right text-muted font-size-12" th:text="${#dates.format(commentNotice.message.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
+							</h6>
+							<div>
+								<a th:href="@{/message/notice/detail/comment}">用户 <i th:text="${commentNotice.user.username}">nowcoder</i> 评论了你的<b th:text="${commentNotice.entityType==1?'帖子':'回复'}">帖子</b> ...</a>
+								<ul class="d-inline font-size-12 float-right">
+									<li class="d-inline ml-2"><span class="text-primary">共 <i th:text="${commentNotice.count}">3</i> 条会话</span></li>
+								</ul>
 							</div>
 						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<label for="password" class="col-sm-2 col-form-label text-right">密码:</label>
-						<div class="col-sm-10">
-							<input type="password" th:class="|form-control  ${passwordMsg!=null?'is-invalid':''}|" id="password" name="password"
-								   th:value="${user!=null?user.password:''}"
-								   placeholder="请输入您的密码!" required>
-							<div class="invalid-feedback" th:text="${passwordMsg}">
-								密码长度不能小于8位!
-							</div>							
-						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<label for="confirm-password" class="col-sm-2 col-form-label text-right">确认密码:</label>
-						<div class="col-sm-10">
-							<input type="password" class="form-control" id="confirm-password"
-								   th:value="${user!=null?user.password:''}"
-								   placeholder="请再次输入密码!" required>
-							<div class="invalid-feedback">
-								两次输入的密码不一致!
+					</li>
+					<!--点赞类通知-->
+					<li class="media pb-3 pt-3 mb-3 border-bottom position-relative" th:if="${likeNotice!=null}">
+						<span class="badge badge-danger" th:if="${likeNotice.unread!=0}" th:text="${likeNotice.unread}">3</span>
+						<img src="http://static.nowcoder.com/images/head/like.png" class="mr-4 user-header" alt="通知图标">
+						<div class="media-body">
+							<h6 class="mt-0 mb-3">
+								<span>赞</span>
+								<span class="float-right text-muted font-size-12" th:text="${#dates.format(likeNotice.message.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
+							</h6>
+							<div>
+								<a th:href="@{/message/notice/detail/like}">用户 <i th:text="${likeNotice.user.username}">nowcoder</i> 点赞了你的<b th:text="${likeNotice.entityType==1?'帖子':'回复'}">帖子</b> ...</a>
+								<ul class="d-inline font-size-12 float-right">
+									<li class="d-inline ml-2"><span class="text-primary">共 <i th:text="${likeNotice.count}">3</i> 条会话</span></li>
+								</ul>
 							</div>
 						</div>
-					</div>
-					<div class="form-group row">
-						<label for="email" class="col-sm-2 col-form-label text-right">邮箱:</label>
-						<div class="col-sm-10">
-							<input type="email" th:class="|form-control ${emailMsg!=null?'is-invalid':''}|" id="email" name="email"
-								   th:value="${user!=null?user.email:''}"
-								   placeholder="请输入您的邮箱!" required>
-							<div class="invalid-feedback" th:text="${emailMsg}">
-								该邮箱已注册!
+					</li>
+					<!--关注类通知-->
+					<li class="media pb-3 pt-3 mb-3 border-bottom position-relative" th:if="${followNotice!=null}">
+						<span class="badge badge-danger" th:if="${followNotice.unread!=0}" th:text="${followNotice.unread}">3</span>
+						<img src="http://static.nowcoder.com/images/head/follow.png" class="mr-4 user-header" alt="通知图标">
+						<div class="media-body">
+							<h6 class="mt-0 mb-3">
+								<span>关注</span>
+								<span class="float-right text-muted font-size-12" th:text="${#dates.format(followNotice.message.createTime,'yyyy-MM-dd HH:mm:ss')}">2019-04-28 14:13:25</span>
+							</h6>
+							<div>
+								<a th:href="@{/message/notice/detail/follow}">用户 <i th:text="${followNotice.user.username}">nowcoder</i> 关注了你 ...</a>
+								<ul class="d-inline font-size-12 float-right">
+									<li class="d-inline ml-2"><span class="text-primary">共 <i th:text="${followNotice.count}">3</i> 条会话</span></li>
+								</ul>
 							</div>
 						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<div class="col-sm-2"></div>
-						<div class="col-sm-10 text-center">
-							<button type="submit" class="btn btn-info text-white form-control">立即注册</button>
-						</div>
-					</div>
-				</form>				
+					</li>
+				</ul>
 			</div>
 		</div>
 
@@ -184,6 +198,5 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script th:src="@{/js/global.js}"></script>
-	<script th:src="@{/js/register.js}"></script>
 </body>
 </html>

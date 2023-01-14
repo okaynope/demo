@@ -6,8 +6,8 @@
 	<link rel="icon" href="https://static.nowcoder.com/images/logo_87_87.png"/>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
 	<link rel="stylesheet" th:href="@{/css/global.css}" />
-	<link rel="stylesheet" th:href="@{/css/login.css}" />
-	<title>牛客网-注册</title>
+	<link rel="stylesheet" th:href="@{/css/letter.css}" />
+	<title>牛客网-私信详情</title>
 </head>
 <body>
 	<div class="nk-container">
@@ -61,59 +61,94 @@
 
 		<!-- 内容 -->
 		<div class="main">
-			<div class="container pl-5 pr-5 pt-3 pb-3 mt-3 mb-3">
-				<h3 class="text-center text-info border-bottom pb-3">注&nbsp;&nbsp;册</h3>
-				<form class="mt-5" method="post" th:action="@{/user/register}">
-					<div class="form-group row">
-						<label for="username" class="col-sm-2 col-form-label text-right">账号:</label>
-						<div class="col-sm-10">
-							<input type="text" th:class="|form-control ${usernameMsg!=null?'is-invalid':''}|" id="username" name="username"
-								   th:value="${user!=null?user.username:''}" placeholder="请输入您的账号!" required>
-							<div class="invalid-feedback" th:text="${usernameMsg}">
-								该账号已存在!
+			<div class="container">
+				<div class="row">
+					<div class="col-8">
+						<h6><b class="square"></b> 来自 <i class="text-success" th:utext="${target.username}">落基山脉下的闲人</i> 的私信</h6>
+					</div>
+					<div class="col-4 text-right">
+						<button type="button" class="btn btn-secondary btn-sm" onclick="back()">返回</button>
+						<button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#sendModal">给TA私信</button>
+					</div>
+				</div>
+				<!-- 弹出框 -->
+				<div class="modal fade" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="exampleModalLabel">发私信</h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<form>
+									<div class="form-group">
+										<label for="recipient-name" class="col-form-label">发给：</label>
+										<input type="text" class="form-control" id="recipient-name" th:value="${target.username}">
+									</div>
+									<div class="form-group">
+										<label for="message-text" class="col-form-label">内容：</label>
+										<textarea class="form-control" id="message-text" rows="10"></textarea>
+									</div>
+								</form>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+								<button type="button" class="btn btn-primary" id="sendBtn">发送</button>
 							</div>
 						</div>
 					</div>
-					<div class="form-group row mt-4">
-						<label for="password" class="col-sm-2 col-form-label text-right">密码:</label>
-						<div class="col-sm-10">
-							<input type="password" th:class="|form-control  ${passwordMsg!=null?'is-invalid':''}|" id="password" name="password"
-								   th:value="${user!=null?user.password:''}"
-								   placeholder="请输入您的密码!" required>
-							<div class="invalid-feedback" th:text="${passwordMsg}">
-								密码长度不能小于8位!
-							</div>							
-						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<label for="confirm-password" class="col-sm-2 col-form-label text-right">确认密码:</label>
-						<div class="col-sm-10">
-							<input type="password" class="form-control" id="confirm-password"
-								   th:value="${user!=null?user.password:''}"
-								   placeholder="请再次输入密码!" required>
-							<div class="invalid-feedback">
-								两次输入的密码不一致!
+				</div>
+				<!-- 提示框 -->
+				<div class="modal fade" id="hintModal" tabindex="-1" role="dialog" aria-labelledby="hintModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg" role="document">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="hintModalLabel">提示</h5>
+							</div>
+							<div class="modal-body" id="hintBody">
+								发送完毕!
 							</div>
 						</div>
 					</div>
-					<div class="form-group row">
-						<label for="email" class="col-sm-2 col-form-label text-right">邮箱:</label>
-						<div class="col-sm-10">
-							<input type="email" th:class="|form-control ${emailMsg!=null?'is-invalid':''}|" id="email" name="email"
-								   th:value="${user!=null?user.email:''}"
-								   placeholder="请输入您的邮箱!" required>
-							<div class="invalid-feedback" th:text="${emailMsg}">
-								该邮箱已注册!
+				</div>						
+				
+				<!-- 私信列表 -->
+				<ul class="list-unstyled mt-4">
+					<li class="media pb-3 pt-3 mb-2" th:each="map:${letters}">
+						<a href="profile.html">
+							<img th:src="${map.fromUser.headerUrl}" class="mr-4 rounded-circle user-header" alt="用户头像" >
+						</a>
+						<div class="toast show d-lg-block" role="alert" aria-live="assertive" aria-atomic="true">
+							<div class="toast-header">
+								<strong class="mr-auto" th:utext="${map.fromUser.username}">落基山脉下的闲人</strong>
+								<small th:text="${#dates.format(map.letter.createTime,'yyyy-MM-dd hh:mm:ss')}">2019-04-25 15:49:32</small>
+								<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="toast-body" th:utext="${map.letter.content}">
+								君不见, 黄河之水天上来, 奔流到海不复回!
 							</div>
 						</div>
-					</div>
-					<div class="form-group row mt-4">
-						<div class="col-sm-2"></div>
-						<div class="col-sm-10 text-center">
-							<button type="submit" class="btn btn-info text-white form-control">立即注册</button>
-						</div>
-					</div>
-				</form>				
+					</li>
+
+				</ul>
+				<!-- 分页 -->
+				<nav class="mt-5" th:replace="index::pagination">
+					<ul class="pagination justify-content-center">
+						<li class="page-item"><a class="page-link" href="#">首页</a></li>
+						<li class="page-item disabled"><a class="page-link" href="#">上一页</a></li>
+						<li class="page-item active"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item"><a class="page-link" href="#">4</a></li>
+						<li class="page-item"><a class="page-link" href="#">5</a></li>
+						<li class="page-item"><a class="page-link" href="#">下一页</a></li>
+						<li class="page-item"><a class="page-link" href="#">末页</a></li>
+					</ul>
+				</nav>
 			</div>
 		</div>
 
@@ -184,6 +219,11 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 	<script th:src="@{/js/global.js}"></script>
-	<script th:src="@{/js/register.js}"></script>
+	<script th:src="@{/js/letter.js}"></script>
+	<script>
+		function back(){
+			location.href = PROJECT_ROOT + "/message/letter/list";
+		}
+	</script>
 </body>
 </html>
