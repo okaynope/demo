@@ -35,7 +35,7 @@ public class MapperTests {
 
     @Test
     public void testSelectUser() {
-        List<User> user = userMapper.selectByName("12");
+        User user = userMapper.selectByName("12");
         System.out.println(user);
     }
 }

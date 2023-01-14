@@ -29,7 +29,7 @@ public class UserService implements CommunityConstant {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @Value("${community.path.domain}")
+    @Value("${communtiy.path.domain}")
     private String domain;
 
     @Value("${server.servlet.context-path}")
@@ -59,8 +59,8 @@ public class UserService implements CommunityConstant {
         }
 
         // 验证账号
-        List<User> u = userMapper.selectByName(user.getUsername());
-        if (u != null) {
+        User u = userMapper.selectByName(user.getUsername());
+        if(u != null) {
             map.put("usernameMsg", "该账号已存在");
             return map;
         }

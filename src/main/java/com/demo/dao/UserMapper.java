@@ -10,9 +10,9 @@ public interface UserMapper {
 
     User selectById(int id);
 
-    List<User> selectByName(String username);
+    User selectByName(String username);
 
-    List<User> selectByEmail(String email);
+    User selectByEmail(String email);
 
     int insertUser(User user);
 
