@@ -2,6 +2,7 @@ package com.demo.service;
 
 import com.demo.dao.UserMapper;
 import com.demo.entity.User;
+import com.demo.util.CommunityConstant;
 import com.demo.util.CommunityUtil;
 import com.demo.util.MailClient;
 import org.apache.commons.lang3.StringUtils;
@@ -17,7 +18,7 @@ import java.util.Map;
 import java.util.Random;
 
 @Service
-public class UserService {
+public class UserService implements CommunityConstant {
 
     @Autowired
     private UserMapper userMapper;
@@ -43,7 +44,6 @@ public class UserService {
 
         if (user == null) {
             throw new IllegalArgumentException("参数不能为空");
-            return map;
         }
         if (StringUtils.isBlank(user.getUsername())) {
             map.put("usernameMsg", "账号不能为空");
@@ -91,6 +91,18 @@ public class UserService {
         mailClient.sendMail(user.getEmail(), "激活账号", content);
 
         return map;
+    }
+
+    public int activation(int userId, String code) {
+        User user = userMapper.selectById(userId);
+        if (user.getUserStatus() == 1) {
+            return ACTIVATION_REPEAT;
+        } else if (user.getActivationCode().equals(code)) {
+            userMapper.updateUserStatus(userId, 1);
+            return ACTIVATION_SUCCESS;
+        } else {
+            return ACTIVATION_FAILURE;
+        }
     }
 
 }

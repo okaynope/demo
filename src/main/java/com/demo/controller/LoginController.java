@@ -28,6 +28,14 @@ public class LoginController {
             model.addAttribute("msg", "注册成功，我们已经向您的邮箱发送了一封激活邮件，请尽快激活");
             model.addAttribute("targer", "/index");
             return "/site/operate-result";
+        } else {
+            model.addAttribute("");
+            model.addAttribute("usernameMsg", map.get("usernameMsg"));
+            model.addAttribute("passwordMsg", map.get("passwordMsg"));
+            model.addAttribute("emailMsg", map.get("emailMsg"));
+            return "/site/register";
         }
     }
+
+    @RequestMapping(path = )
 }
