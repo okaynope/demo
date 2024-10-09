@@ -1,19 +1,35 @@
 $(function(){
+    // $("form").submit(check_data);
+    // $("input").focus(clear_error);
     $("#uploadForm").submit(upload);
 });
 
+function check_data() {
+    var pwd1 = $("#new-password").val();
+    var pwd2 = $("#confirm-password").val();
+    if(pwd1 != pwd2) {
+        $("#confirm-password").addClass("is-invalid");
+        return false;
+    }
+    return true;
+}
+
+function clear_error() {
+    $(this).removeClass("is-invalid");
+}
+
 function upload() {
     $.ajax({
-        url: "http://upload-z1.qiniup.com", // 华北存储url
+        url: "https://upload-z1.qiniup.com",
         method: "post",
-        processData: false, // 不要把表单内容转换成字符串，由浏览器自行判断
-        contentType: false, // 上传数据类型不指定，浏览器自动设置，数据边界key由浏览器自动生成
+        processData: false,
+        contentType: false,
         data: new FormData($("#uploadForm")[0]),
         success: function(data) {
             if(data && data.code == 0) {
                 // 更新头像访问路径
                 $.post(
-                    PROJECT_ROOT + "/user/header/url",
+                    CONTEXT_PATH + "/user/header/url",
                     {"fileName":$("input[name='key']").val()},
                     function(data) {
                         data = $.parseJSON(data);

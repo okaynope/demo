@@ -1,67 +1,74 @@
-function like(obj,entityType,entityId,entityUserId,postId) {
+$(function(){
+    $("#topBtn").click(setTop);
+    $("#wonderfulBtn").click(setWonderful);
+    $("#deleteBtn").click(setDelete);
+});
+function like(btn, entityType, entityId, entityUserId, postId) {
+    // // 发送ajax请求之前，将CSRF令牌设置到请求的消息头中
+    // var token = $("meta[name='_csrf']").attr("content");
+    // var header = $("meta[name='_csrf_header']").attr("content");
+    // $(document).ajaxSend(function (e,xhr, options) {
+    //     xhr.setRequestHeader(header, token);
+    // });
     $.post(
-        PROJECT_ROOT + "/like/giveLike",
-        {"entityType":entityType,"entityId":entityId,"entityUserId":entityUserId,"postId":postId},
+        CONTEXT_PATH + "/like",
+        {"entityType": entityType, "entityId": entityId, "entityUserId": entityUserId, "postId": postId},
+        function (data) {
+            data = $.parseJSON(data)
+            if (data.code == 0) {
+                $(btn).children("i").text(data.likeCount);
+                $(btn).children("b").text(data.likeStatus == 1 ? '已赞' : "赞");
+            } else {
+                alert(data.msg);
+            }
+        }
+    );
+}
+
+// 置顶
+function setTop() {
+    $.post(
+        CONTEXT_PATH + "/discuss/top",
+        {"id": $("#postId").val()},
         function (data) {
             data = $.parseJSON(data);
-            if(data.code==0){
-                $(obj).children("i").text(data.likeCount);
-                $(obj).children("b").text(data.likeStatus==1?'已赞':'赞');
-            }else{
+            if (data.code == 0) {
+                window.location.reload();
+            } else {
                 alert(data.msg);
             }
         }
     )
 }
 
-$(function () {
-    $("#topBtn").click(setTop);
-    $("#fineBtn").click(setFine);
-    $("#deleteBtn").click(setDelete);
-});
-
-function setTop() {
+// 加精
+function setWonderful() {
     $.post(
-        PROJECT_ROOT + "/discuss/top",
-        {"id":$("#postId").val()},
+        CONTEXT_PATH + "/discuss/wonderful",
+        {"id": $("#postId").val()},
         function (data) {
             data = $.parseJSON(data);
-            if(data.code == 0){
-                $("#topBtn").attr("disabled","disabled");
-            }else{
+            if (data.code == 0) {
+                window.location.reload();
+            } else {
                 alert(data.msg);
             }
         }
-    );
+    )
 }
 
-function setFine() {
-    $.post(
-        PROJECT_ROOT + "/discuss/fine",
-        {"id":$("#postId").val()},
-        function (data) {
-            data = $.parseJSON(data);
-            if(data.code == 0){
-                $("#fineBtn").attr("disabled","disabled");
-            }else{
-                alert(data.msg);
-            }
-        }
-    );
-}
-
+// 删除
 function setDelete() {
     $.post(
-        PROJECT_ROOT + "/discuss/delete",
-        {"id":$("#postId").val()},
+        CONTEXT_PATH + "/discuss/delete",
+        {"id": $("#postId").val()},
         function (data) {
             data = $.parseJSON(data);
-            if(data.code == 0){
-                // $("#deleteBtn").attr("disabled","disabled");
-                window.location.href=PROJECT_ROOT+"/index";
-            }else{
+            if (data.code == 0) {
+                location.href = CONTEXT_PATH + "/index";
+            } else {
                 alert(data.msg);
             }
         }
-    );
+    )
 }

@@ -1,5 +1,5 @@
-var CONTEXT_PATH = "/community/user";
-var PROJECT_ROOT = "/community";
+var CONTEXT_PATH = "";
+
 window.alert = function(message) {
 	if(!$(".alert-box").length) {
 		$("body").append(
@@ -32,9 +32,3 @@ window.alert = function(message) {
 	$(".alert-box .modal-body p").text(message);
 	$(".alert-box").modal("show");
 }
-
-function refreshImage(){
-	var path = CONTEXT_PATH + "/kaptcha?p="+Math.random();
-	$("#kaptcha").attr("src",path);
-}
-

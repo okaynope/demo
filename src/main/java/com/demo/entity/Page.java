@@ -3,7 +3,7 @@ package com.demo.entity;
 public class Page {
 
     private int current = 1;
-    private int limit = 3;
+    private int limit = 5;
     private int rows = 1;
     private String path;
 

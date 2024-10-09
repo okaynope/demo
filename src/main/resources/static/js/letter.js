@@ -6,28 +6,25 @@ $(function(){
 function send_letter() {
 	$("#sendModal").modal("hide");
 
-	let toName = $("#recipient-name").val();
-	let messageContent = $("#message-text").val();
+	var toName = $("#recipient-name").val();
+	var content = $("#message-text").val();
+	$.post(
+	    CONTEXT_PATH + "/letter/send",
+	    {"toName":toName,"content":content},
+	    function(data) {
+	        if(data.code == 0) {
+	            $("#hintBody").text("发送成功!");
+	        } else {
+	            $("#hintBody").text(data.msg);
+	        }
 
-	$.post(PROJECT_ROOT + "/message/letter/send",
-		{"toName":toName,"content":messageContent},
-		function (data) {
-			data = $.parseJSON(data);
-			if(data.code == 0){
-				$("#hintBody").text("发送成功");
-			}else{
-				$("#hintBody").text(data.message);
-			}
-
-			$("#hintModal").modal("show");
-			setTimeout(function(){
-				$("#hintModal").modal("hide");
-			}, 2000);
-			window.location.reload();
-		}
-	 );
-
-
+	        $("#hintModal").modal("show");
+            setTimeout(function(){
+                $("#hintModal").modal("hide");
+                location.reload();
+            }, 2000);
+	    }
+	);
 }
 
 function delete_msg() {
