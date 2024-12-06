@@ -19,10 +19,10 @@ public class RedisConfig {
         template.setKeySerializer(redisSerializer);
         //key haspmap序列化
         template.setHashKeySerializer(redisSerializer);
-//        //value序列化
-//        template.setValueSerializer(redisSerializer);
-//        //value hashmap序列化
-//        template.setHashValueSerializer(redisSerializer);
+        //value序列化
+        template.setValueSerializer(redisSerializer);
+        //value hashmap序列化
+        template.setHashValueSerializer(redisSerializer);
         template.setConnectionFactory(factory);
         return template;
     }
