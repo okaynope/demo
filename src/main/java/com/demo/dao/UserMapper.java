@@ -18,8 +18,8 @@ public interface UserMapper {
 
     int updateUserStatus(int id, int userStatus);
 
-    int updatePassword(int id, int password);
+    int updatePassword(int id, String password);
 
-    int updateHeader(int id, int headerUrl);
+    int updateHeader(int id, String headerUrl);
 
 }

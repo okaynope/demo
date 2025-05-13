@@ -16,7 +16,7 @@ class DemoApplicationTests {
 
     @Test
     public void testSelectPosts() {
-        List<DiscussPost> discussPosts = discussPostMapper.selectDiscussPosts(0, 0, 5);
+        List<DiscussPost> discussPosts = discussPostMapper.selectDiscussPosts(0, 0, 5, 0);
         for(DiscussPost post : discussPosts){
             System.out.println(post.toString());
         }

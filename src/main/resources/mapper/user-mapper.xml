@@ -5,7 +5,7 @@
 <mapper namespace="com.demo.dao.UserMapper">
 
     <sql id="selectFields">
-        username,password,salt,email,user_type,user_status,activation_code,header_url,create_time
+        id,username,password,salt,email,user_type,user_status,activation_code,header_url,create_time
     </sql>
     <sql id="insertFields">
         username,password,salt,email,user_type,user_status,activation_code,header_url,create_time

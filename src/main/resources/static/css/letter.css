@@ -14,3 +14,12 @@
 	max-width: 100%;
 	width: 80%;
 }
+
+div.changeDiv input {
+	font-size: 1em;
+	font-family: 仿宋, serif;
+	display: block;
+	opacity: 0.8;
+	color: #000000;
+	background-color: #bed8df;
+}
